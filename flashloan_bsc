@@ -8,6 +8,7 @@ import './interfaces/IERC20.sol';
 
 contract Arbitrage {
   address public pancakeFactory;
+  uint constant deadline = 10 days;
   IUniswapV2Router02 public bakeryRouter;
 
   constructor(address _pancakeFactory, address _bakeryRouter) public {
@@ -27,7 +28,7 @@ contract Arbitrage {
       amount0, 
       amount1, 
       address(this), 
-      bytes('not empty') //not empty bytes param will trigger flashloan
+      bytes('not empty')
     );
   }
 
@@ -66,7 +67,7 @@ contract Arbitrage {
       amountRequired, 
       path, 
       msg.sender, 
-      block.timestamp
+      deadline
     )[1];
 
     IERC20 otherToken = IERC20(_amount0 == 0 ? token0 : token1);
